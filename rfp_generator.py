@@ -141,7 +141,7 @@ Do NOT generate final, publication-ready content. Generate STRUCTURED OUTLINES t
         try:
             # Initialize Gemini model
             model = genai.GenerativeModel(
-                model_name='gemini-1.5-pro',
+                model_name='gemini-2.5-pro',
                 generation_config={
                     'temperature': 0.7,
                     'max_output_tokens': 8000,
