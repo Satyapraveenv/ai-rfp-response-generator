@@ -17,17 +17,23 @@ import argparse
 import re
 from pathlib import Path
 from dotenv import load_dotenv
-import openai
+import google.generativeai as genai
 
 # Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
-openai.api_key = os.getenv("OPENAI_API_KEY")
-if not openai.api_key:
-    print("Error: OPENAI_API_KEY not found in environment variables.")
-    print("Please create a .env file with: OPENAI_API_KEY=sk-...")
+# Initialize Google Gemini API
+api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    print("Error: GOOGLE_API_KEY not found in environment variables.")
+    print("Please create a .env file with: GOOGLE_API_KEY=your-key-here")
+    print("\nTo get a free API key:")
+    print("1. Go to https://makersuite.google.com/app/apikey")
+    print("2. Click 'Create API Key'")
+    print("3. Copy the key to your .env file")
     sys.exit(1)
+
+genai.configure(api_key=api_key)
 
 
 class RFPResponseGenerator:
@@ -133,37 +139,45 @@ Do NOT generate final, publication-ready content. Generate STRUCTURED OUTLINES t
         user_prompt = self._build_user_prompt(rfp_content, sections)
 
         try:
-            # Call OpenAI API
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=0.7,
-                max_tokens=4000,
+            # Initialize Gemini model
+            model = genai.GenerativeModel(
+                model_name='gemini-1.5-pro',
+                generation_config={
+                    'temperature': 0.7,
+                    'max_output_tokens': 8000,
+                }
             )
 
-            generated_response = response.choices[0].message["content"]
+            # Combine system prompt and user prompt for Gemini
+            full_prompt = f"{self.system_prompt}\n\n{user_prompt}"
+
+            # Call Google Gemini API
+            response = model.generate_content(full_prompt)
+
+            generated_response = response.text
 
             # Extract quality score if present
             quality_score = self._extract_quality_score(generated_response)
+
+            # Estimate token usage (Gemini doesn't provide exact counts in the same way)
+            tokens_used = len(full_prompt.split()) + len(generated_response.split())
 
             return {
                 "response": generated_response,
                 "quality_score": quality_score,
                 "sections": sections,
-                "tokens_used": response.usage.total_tokens,
+                "tokens_used": tokens_used,
             }
 
-        except openai.error.AuthenticationError:
-            raise Exception("OpenAI API authentication failed. Check your API key.")
-        except openai.error.RateLimitError:
-            raise Exception(
-                "OpenAI API rate limit exceeded. Please wait a moment and try again."
-            )
-        except openai.error.APIError as e:
-            raise Exception(f"OpenAI API error: {str(e)}")
+        except Exception as e:
+            if "API_KEY" in str(e).upper():
+                raise Exception("Google API authentication failed. Check your API key.")
+            elif "RATE_LIMIT" in str(e).upper() or "QUOTA" in str(e).upper():
+                raise Exception(
+                    "Google API rate limit exceeded. Please wait a moment and try again."
+                )
+            else:
+                raise Exception(f"Google Gemini API error: {str(e)}")
 
     def _build_user_prompt(self, rfp_content, sections):
         """Build the user prompt for the API call."""

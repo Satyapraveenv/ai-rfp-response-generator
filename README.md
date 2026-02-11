@@ -3,7 +3,7 @@
 **AI-assisted RFP/RFI response framework for IT services and consulting firms**
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square)
-![OpenAI API](https://img.shields.io/badge/OpenAI-GPT--4-green?style=flat-square)
+![Google Gemini](https://img.shields.io/badge/Google-Gemini%201.5%20Pro-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ---
@@ -58,7 +58,7 @@ The AI handles the **structural lift**. Your team focuses on the **strategic dif
 │  │ - Compliance frameworks   │  │
 │  └───────────────────────────┘  │
 │                                 │
-│  Powered by OpenAI GPT-4        │
+│  Powered by Google Gemini 1.5 Pro│
 └────────────┬────────────────────┘
              │
              ▼
@@ -99,7 +99,7 @@ Based on $3M+ RFP-driven wins in enterprise IT services and consulting:
 
 ```bash
 python 3.8+
-OpenAI API key (GPT-4 or GPT-4 Turbo)
+Google Gemini API key (FREE - get it at https://makersuite.google.com/app/apikey)
 ```
 
 ### Installation
@@ -113,8 +113,13 @@ pip install -r requirements.txt
 ### Create `.env` file
 
 ```bash
-OPENAI_API_KEY=sk-your-api-key-here
+GOOGLE_API_KEY=your-google-api-key-here
 ```
+
+To get your FREE Google API key:
+1. Visit https://makersuite.google.com/app/apikey
+2. Click "Create API Key"
+3. Copy the key and paste it in your `.env` file
 
 ### Basic Usage
 
