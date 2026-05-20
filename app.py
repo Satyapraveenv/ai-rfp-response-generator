@@ -407,7 +407,15 @@ if "result" in st.session_state:
 
     with tab_download:
         gen_obj  = RFPGenerator()
-        html_out = gen_obj.to_html(company_name_out, response_text, quality_score)
+        saved_profile = {
+            "name":            company_name_out,
+            "hq":              st.session_state.get("cp_founded", ""),
+            "size":            st.session_state.get("cp_size", ""),
+            "website":         st.session_state.get("cp_website", ""),
+            "services":        st.session_state.get("cp_services", ""),
+            "differentiators": st.session_state.get("cp_diff", ""),
+        }
+        html_out = gen_obj.to_html(company_name_out, response_text, quality_score, saved_profile)
         st.download_button(
             label="⬇️ Download as HTML",
             data=html_out,
