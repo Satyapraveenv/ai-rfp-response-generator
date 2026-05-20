@@ -1,10 +1,30 @@
-# 🤖 AI RFP Response Generator
+# 📋 AI RFP Response Generator
 
-**AI-assisted RFP/RFI response framework for IT services and consulting firms**
+**BCG-quality RFP proposals in ~60 seconds — for any company, any RFP**
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square)
-![Google Gemini](https://img.shields.io/badge/Google-Gemini%201.5%20Pro-green?style=flat-square)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.40+-red?style=flat-square)
+![Claude](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+
+---
+
+## What It Does
+
+A **Streamlit web app** that generates world-class RFP responses powered by Anthropic's Claude AI.
+
+Enter your company name + website URL → Claude scrapes the site and auto-fills your company profile → paste the RFP → get a BCG-quality proposal in ~60 seconds.
+
+**Output includes:**
+- Executive Summary (CEO-readable, conclusion-first)
+- Technical Approach & Methodology
+- Project Team & Organizational Structure
+- Work Plan & Timeline with milestones
+- Risk Management & Mitigation
+- Compliance Matrix (every RFP requirement mapped)
+- Pricing & Cost Structure
+- References & Case Studies
+- Quality Score (0–100) with gap analysis
 
 ---
 
@@ -12,84 +32,12 @@
 
 RFP responses are a **necessary evil** in consulting sales:
 
-- **40-80 hours** of senior consultant time per response
-- **~80% of effort is structural**: reformulating past responses, aligning to evaluation criteria, ensuring section completeness
-- **High consistency cost**: manually checking for compliance gaps, missing criteria, inconsistent positioning
-- **Opportunity cost**: senior talent stuck doing templated work instead of strategy and customization
+- **40–80 hours** of senior consultant time per response
+- **~80% of effort is structural**: reformulating past responses, aligning to criteria, ensuring completeness
+- **High consistency cost**: manually checking for compliance gaps and missing criteria
+- **Opportunity cost**: senior talent stuck doing templated work instead of strategy
 
-This is exactly the kind of work where AI excels: **structured, knowledge-intensive, pattern-based**.
-
-## The Solution
-
-An **AI-powered RFP response framework** that:
-
-1. **Ingests RFP requirements** (PDF, docx, or text)
-2. **Generates structured response outlines** with:
-   - Executive Summary drafts
-   - Technical Approach sections
-   - Team Composition models
-   - Delivery Methodology
-   - Risk Mitigation strategies
-   - Pricing Framework guidance
-   - Compliance Matrix (against evaluation criteria)
-3. **Scores response quality** against RFP completeness
-4. **Outputs ready-for-review** Markdown for customization
-
-The AI handles the **structural lift**. Your team focuses on the **strategic differentiation**.
-
----
-
-## How It Works
-
-```
-┌─────────────────┐
-│  RFP Document   │  (Text, Markdown, or PDF)
-│  Requirements   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────────┐
-│  AI RFP Response Generator      │
-│  ┌───────────────────────────┐  │
-│  │ System Prompt:            │  │
-│  │ - IT services expertise   │  │
-│  │ - RFP best practices      │  │
-│  │ - Evaluation criteria     │  │
-│  │ - Compliance frameworks   │  │
-│  └───────────────────────────┘  │
-│                                 │
-│  Powered by Google Gemini 1.5 Pro│
-└────────────┬────────────────────┘
-             │
-             ▼
-┌──────────────────────────────────────┐
-│  Response Outline (Markdown)         │
-│  ✓ Executive Summary                 │
-│  ✓ Technical Approach                │
-│  ✓ Team Composition                  │
-│  ✓ Delivery Methodology              │
-│  ✓ Risk Mitigation                   │
-│  ✓ Pricing Framework                 │
-│  ✓ Compliance Matrix                 │
-│  ✓ Quality Score                     │
-└──────────────────────────────────────┘
-```
-
----
-
-## Business Impact
-
-Based on $3M+ RFP-driven wins in enterprise IT services and consulting:
-
-| Metric | Impact |
-|--------|--------|
-| **Hours Saved** | 30-50 hours per RFP (38-62% reduction) |
-| **Quality Gain** | 95%+ compliance to evaluation criteria |
-| **Cost Savings** | Senior consultant time redirected to strategy |
-| **Win Rate** | Faster turnaround = bid more RFPs = more wins |
-| **Consistency** | Same high standard across all responses |
-
-**Real Example**: A 5-person consulting firm responding to 8-10 RFPs/year saves **240-400 hours annually**. That's one full-time employee freed up for billable work.
+This is exactly where AI excels: structured, knowledge-intensive, pattern-based work.
 
 ---
 
@@ -98,8 +46,8 @@ Based on $3M+ RFP-driven wins in enterprise IT services and consulting:
 ### Prerequisites
 
 ```bash
-python 3.8+
-Google Gemini API key (FREE - get it at https://makersuite.google.com/app/apikey)
+Python 3.8+
+Anthropic API key (get one at https://console.anthropic.com)
 ```
 
 ### Installation
@@ -110,92 +58,64 @@ cd ai-rfp-response-generator
 pip install -r requirements.txt
 ```
 
-### Create `.env` file
+### Configure API Key
+
+Create a `.env` file in the project root:
 
 ```bash
-GOOGLE_API_KEY=your-google-api-key-here
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
 ```
 
-To get your FREE Google API key:
-1. Visit https://makersuite.google.com/app/apikey
-2. Click "Create API Key"
-3. Copy the key and paste it in your `.env` file
+Get your API key at [console.anthropic.com](https://console.anthropic.com). New accounts get free credits to start.
 
-### Basic Usage
+### Run the App
 
 ```bash
-# Generate full RFP response
-python rfp_generator.py --input examples/sample-rfp-requirements.md --output my-response.md
-
-# Generate specific sections only
-python rfp_generator.py --input rfp.md --sections "Executive Summary,Technical Approach"
-
-# With custom system prompt
-python rfp_generator.py --input rfp.md --system-prompt prompts/rfp-response-system-prompt.md
+streamlit run app.py
 ```
 
-### Output
-
-The generator produces a **scored, structured Markdown document** with:
-
-- Complete response outline across all sections
-- Quality score (0-100) indicating compliance coverage
-- Guidance notes for human customization
-- Bracketed placeholders `[CUSTOMIZE]` for team-specific info
-
-Example output:
-
-```markdown
-# RFP Response: [Client Name] - [Project Name]
-
-## Executive Summary
-[Generated overview positioning your firm's unique value]
-
-Quality Score: 87/100
-- ✓ Covers 8/8 technical requirements
-- ✓ Addresses 5/5 evaluation criteria
-- ⚠ Pricing framework needs customization
-```
+Open **http://localhost:8501** in your browser.
 
 ---
 
-## Template Structure
+## How to Use
 
-The tool uses a proven RFP response template with these sections:
-
-```
-1. Executive Summary (1-2 pages)
-2. Company Background & Qualifications
-3. Technical Approach & Methodology
-4. Project Team & Organizational Structure
-5. Work Plan & Timeline
-6. Risk Management & Mitigation
-7. Compliance Matrix
-8. Pricing & Cost Structure
-9. References & Case Studies
-```
-
-See `templates/rfp-response-template.md` for the full structure and guidance.
+1. **Enter company name + website** in the sidebar
+2. Click **🔍 Auto-fill from Website** — Claude scrapes the site and fills all profile fields automatically
+3. Review and edit the extracted details
+4. **Paste your RFP** in the main area (or click **📥 Load Sample RFP** for a demo)
+5. Click **🚀 Generate World-Class RFP Response**
+6. Download the polished HTML proposal
 
 ---
 
-## Examples
+## Auto-fill Feature
 
-### Sample Input
-See `examples/sample-rfp-requirements.md` — a realistic RFP for QE transformation services
+The auto-fill feature scrapes up to 5 pages from the company website (homepage, /about, /services, /industries, /case-studies) and uses Claude to extract:
 
-### Sample Output
-See `examples/sample-generated-response.md` — the AI-generated response outline (impressive, not cherry-picked)
+- Founded year & HQ location
+- Company size & employee count
+- Core services & offerings
+- Key differentiators
+- Certifications & compliance (ISO, SOC 2, CMMI, etc.)
+- Industries served
+- Notable clients
+- Relevant case studies with metrics
+
+All fields are editable before generation — review and customize as needed.
 
 ---
 
-## Configuration
+## Writing Quality
 
-Edit `prompts/rfp-response-system-prompt.md` to customize:
-- Industry focus (IT services, consulting, managed services, etc.)
-- Specific compliance frameworks (ISO 27001, SOC 2, CMMI, etc.)
-- Evaluation criteria weights
-- Response tone and formality level
+Responses follow **BCG-style writing principles**:
+
+- **Pyramid Principle** — Lead with conclusion, then evidence
+- **MECE** — Mutually Exclusive, Collectively Exhaustive sections
+- **Quantified claims** — Specific numbers, not vague language
+- **AI-native framing** — Quality Engineering positioned as AI-first, not legacy QA
+- **Client-centric mirroring** — Uses the client's exact language from the RFP
+- **Risk intelligence** — Proactively names risks the client hasn't mentioned
 
 ---
 
@@ -203,54 +123,51 @@ Edit `prompts/rfp-response-system-prompt.md` to customize:
 
 ```
 ai-rfp-response-generator/
-├── rfp_generator.py              # Main CLI tool
+├── app.py                          # Streamlit web app (main entry point)
+├── generator.py                    # Claude API integration + HTML export
+├── scraper.py                      # Website scraper + profile extractor
 ├── prompts/
-│   └── rfp-response-system-prompt.md   # System prompt (documented)
-├── templates/
-│   └── rfp-response-template.md        # Response structure + guidance
+│   └── bcg_system_prompt.md        # BCG-style writing system prompt
 ├── examples/
-│   ├── sample-rfp-requirements.md       # Realistic sample RFP
-│   └── sample-generated-response.md     # AI-generated output
+│   └── sample-rfp-requirements.md  # Sample RFP for testing
+├── templates/
+│   └── rfp-response-template.md    # Response structure reference
+├── innominds-rfp.md                # Demo RFP (HealthFirst Insurance)
+├── innominds-demo-response.html    # Demo output (rendered proposal)
 ├── requirements.txt
 ├── .gitignore
 ├── LICENSE
-└── README.md (this file)
+└── README.md
 ```
+
+---
+
+## Business Impact
+
+| Metric | Impact |
+|--------|--------|
+| **Time Saved** | 30–50 hours per RFP (38–62% reduction) |
+| **Compliance** | 95%+ coverage of evaluation criteria |
+| **Turnaround** | ~60 seconds vs. 3–5 days |
+| **Consistency** | Same high standard across all responses |
+| **Scale** | Bid more RFPs without adding headcount |
 
 ---
 
 ## Roadmap
 
-- [ ] Support for PDF and DOCX RFP input
-- [ ] Multi-turn refinement (iterative Q&A with AI)
-- [ ] Local LLM support (Ollama, LLaMA 2)
-- [ ] Competitor analysis integration
-- [ ] Client-specific customization profiles
-- [ ] Automated compliance matrix generation
-- [ ] Integration with CRM systems (Salesforce, HubSpot)
-- [ ] Team collaboration workflow (marking sections for review)
-
----
-
-## Contributing
-
-Contributions welcome! Areas of interest:
-
-- Improved system prompts for different industries
-- Better compliance matrix generation
-- RFP parsing from PDF/DOCX
-- Quality scoring algorithms
-- Additional response templates
-
-Please open an issue or PR.
+- [ ] PDF and DOCX RFP upload support
+- [ ] Multi-turn refinement (iterate sections with AI feedback)
+- [ ] Saved company profiles (reuse across RFPs)
+- [ ] Side-by-side RFP requirement ↔ response view
+- [ ] Team collaboration (mark sections for review)
+- [ ] CRM integration (Salesforce, HubSpot)
 
 ---
 
 ## License
 
-MIT License - 2025 - Satya Praveen Vemuri
-
-See `LICENSE` for details.
+MIT License — 2025 — Satya Praveen Vemuri
 
 ---
 
@@ -261,21 +178,11 @@ See `LICENSE` for details.
 - Led $3M+ in RFP-driven enterprise wins
 - Built RFP processes for high-growth IT services firms
 - 10+ years in technology sales and solutions engineering
-- Passionate about automating repetitive consulting work with AI
 
 **Connect**: [LinkedIn](https://www.linkedin.com/in/satyapraveenv/)
 
 ---
 
-## Support & Feedback
-
-Questions? Found a bug? Ideas for improvement?
-
-- Open an issue on GitHub
-- Reach out on [LinkedIn](https://www.linkedin.com/in/satyapraveenv/)
-
----
-
 ## Disclaimer
 
-This tool generates **response outlines and drafts**, not final RFP submissions. All generated content must be reviewed, customized, and approved by qualified team members before submission. The tool is a **productivity accelerator**, not a replacement for professional judgment and expertise.
+This tool generates response outlines and drafts, not final RFP submissions. All generated content must be reviewed, customized, and approved by qualified team members before submission.

@@ -130,6 +130,9 @@ dmypy.json
 *~
 .DS_Store
 
+# Claude Code dev tools
+.claude/
+
 # Project artifacts
 rfp_response.md
 *.pdf

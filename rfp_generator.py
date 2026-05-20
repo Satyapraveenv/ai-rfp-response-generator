@@ -17,7 +17,7 @@ import argparse
 import re
 from pathlib import Path
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 # Load environment variables
 load_dotenv()
@@ -33,7 +33,7 @@ if not api_key:
     print("3. Copy the key to your .env file")
     sys.exit(1)
 
-genai.configure(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
 
 class RFPResponseGenerator:
@@ -139,20 +139,14 @@ Do NOT generate final, publication-ready content. Generate STRUCTURED OUTLINES t
         user_prompt = self._build_user_prompt(rfp_content, sections)
 
         try:
-            # Initialize Gemini model
-            model = genai.GenerativeModel(
-                model_name='gemini-2.5-pro',
-                generation_config={
-                    'temperature': 0.7,
-                    'max_output_tokens': 8000,
-                }
-            )
-
-            # Combine system prompt and user prompt for Gemini
+            # Combine system prompt and user prompt
             full_prompt = f"{self.system_prompt}\n\n{user_prompt}"
 
-            # Call Google Gemini API
-            response = model.generate_content(full_prompt)
+            # Call Google Gemini API using new SDK
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=full_prompt,
+            )
 
             generated_response = response.text
 
@@ -170,14 +164,7 @@ Do NOT generate final, publication-ready content. Generate STRUCTURED OUTLINES t
             }
 
         except Exception as e:
-            if "API_KEY" in str(e).upper():
-                raise Exception("Google API authentication failed. Check your API key.")
-            elif "RATE_LIMIT" in str(e).upper() or "QUOTA" in str(e).upper():
-                raise Exception(
-                    "Google API rate limit exceeded. Please wait a moment and try again."
-                )
-            else:
-                raise Exception(f"Google Gemini API error: {str(e)}")
+            raise Exception(f"Google Gemini API error: {str(e)}")
 
     def _build_user_prompt(self, rfp_content, sections):
         """Build the user prompt for the API call."""
